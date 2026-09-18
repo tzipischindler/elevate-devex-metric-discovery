@@ -294,13 +294,16 @@
   }
   .rating-scale-endpoint { font-size: 13px; color: var(--ink-soft); }
   .rating-scale-endpoint:last-child { text-align: right; }
+  .rating-scale-options { display: flex; justify-content: space-around; align-items: center; }
   .rating-scale-option { display: grid; justify-items: center; gap: 6px; }
   .rating-scale-option label { font-size: 13px; color: var(--ink); cursor: pointer; }
   .rating-scale-option input { margin: 0; accent-color: var(--accent); }
   @media (max-width: 560px) {
-    .rating-scale { grid-template-columns: 1fr; gap: 8px; }
-    .rating-scale-endpoint:last-child { text-align: left; }
-    .rating-scale-options { display: flex; justify-content: space-between; }
+    .rating-scale {
+      grid-template-columns: minmax(72px, 1fr) minmax(0, 3fr) minmax(72px, 1fr);
+      gap: 6px;
+    }
+    .rating-scale-endpoint { font-size: 11px; }
   }
 
   .signals-body { padding: 6px 20px 18px; }
@@ -527,7 +530,7 @@
         </div>
       </div>
       <div class="row question">
-        <label for="flowInterrupt">Minimal interruptions/delays <span class="hint">1 Very unlikely – 5 Very likely</span></label>
+        <label for="flowInterrupt">Think of the past week, how capable were you of completing work with minimal interruptions or delays?</label>
       </div>
       <div class="row radio-options">
         <div class="rating-scale" id="flowInterrupt">
@@ -557,30 +560,66 @@
           <span class="rating-scale-endpoint">Very likely</span>
         </div>
       </div>
-      <div class="row">
-        <label for="focusTime">Sufficient uninterrupted focus time <span class="hint">1 Strong disagreement – 5 Strong agreement</span></label>
-        <div>
-          <select id="focusTime">
-            <option value="">— select —</option>
-            <option value="1">1 — Strong disagreement</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5 — Strong agreement</option>
-          </select>
+      <div class="row question">
+        <label for="focusTime">I have sufficient time to focus on my work and am uninterrupted</label>
+      </div>
+      <div class="row radio-options">
+        <div class="rating-scale" id="focusTime">
+          <span class="rating-scale-endpoint">Strong disagreement</span>
+          <div class="rating-scale-options">
+            <div class="rating-scale-option">
+              <label for="focusTime1">1</label>
+              <input type="radio" name="focusTime" id="focusTime1" value="1">
+            </div>
+            <div class="rating-scale-option">
+              <label for="focusTime2">2</label>
+              <input type="radio" name="focusTime" id="focusTime2" value="2">
+            </div>
+            <div class="rating-scale-option">
+              <label for="focusTime3">3</label>
+              <input type="radio" name="focusTime" id="focusTime3" value="3">
+            </div>
+            <div class="rating-scale-option">
+              <label for="focusTime4">4</label>
+              <input type="radio" name="focusTime" id="focusTime4" value="4">
+            </div>
+            <div class="rating-scale-option">
+              <label for="focusTime5">5</label>
+              <input type="radio" name="focusTime" id="focusTime5" value="5">
+            </div>
+          </div>
+          <span class="rating-scale-endpoint">Strong agreement</span>
         </div>
       </div>
-      <div class="row">
-        <label for="commEase">Ease of communicating within team <span class="hint">1 Reach agreement & move forward – 5 Stuck in disagreement</span></label>
-        <div>
-          <select id="commEase">
-            <option value="">— select —</option>
-            <option value="1">1 — Agreement, move forward</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5 — Stuck in disagreement</option>
-          </select>
+      <div class="row question">
+        <label for="commEase">How would you describe the ease of communicating within your team?</label>
+      </div>
+      <div class="row radio-options">
+        <div class="rating-scale" id="commEase">
+          <span class="rating-scale-endpoint">Easy to reach an agreement &amp; move forward</span>
+          <div class="rating-scale-options">
+            <div class="rating-scale-option">
+              <label for="commEase1">1</label>
+              <input type="radio" name="commEase" id="commEase1" value="1">
+            </div>
+            <div class="rating-scale-option">
+              <label for="commEase2">2</label>
+              <input type="radio" name="commEase" id="commEase2" value="2">
+            </div>
+            <div class="rating-scale-option">
+              <label for="commEase3">3</label>
+              <input type="radio" name="commEase" id="commEase3" value="3">
+            </div>
+            <div class="rating-scale-option">
+              <label for="commEase4">4</label>
+              <input type="radio" name="commEase" id="commEase4" value="4">
+            </div>
+            <div class="rating-scale-option">
+              <label for="commEase5">5</label>
+              <input type="radio" name="commEase" id="commEase5" value="5">
+            </div>
+          </div>
+          <span class="rating-scale-endpoint">Difficult to reach an agreement</span>
         </div>
       </div>
       <div class="row">
@@ -689,8 +728,8 @@
       [ENTRY.changeFailureRate, getFieldValue('changeFailureRate')],
       [ENTRY.mttr, getFieldValue('mttr')],
       [ENTRY.flowInterrupt, getFieldValue('flowInterrupt')],
-      [ENTRY.focusTime, els.focusTime.value],
-      [ENTRY.commEase, els.commEase.value],
+      [ENTRY.focusTime, getFieldValue('focusTime')],
+      [ENTRY.commEase, getFieldValue('commEase')],
       [ENTRY.prTurnaround, els.prTurnaround.value],
       [ENTRY.natureOfWork, els.natureOfWork.value],
       [ENTRY.qualityWords, els.qualityWords.value]
