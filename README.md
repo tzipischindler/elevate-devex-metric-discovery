@@ -1,4 +1,4 @@
-# Elevate DevEx Metric Disocvery 🛠️
+# DevEx Metric Disocvery 🛠️
 
 > *Built at Elevate Women's Hackathon 2026*
 
