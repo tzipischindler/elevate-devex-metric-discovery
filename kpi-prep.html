@@ -143,11 +143,17 @@
     border-bottom: 1px solid var(--border);
     align-items: start;
   }
+
+  .question{
+    grid-template-columns: 1fr;
+  }
+  .radio-options {
+    grid-template-columns: 1fr;
+  }
   .row:last-child { border-bottom: none; }
   .row label {
     font-size: 13px;
     color: var(--ink-soft);
-    padding-top: 9px;
     line-height: 1.4;
   }
   .row .hint {
@@ -279,7 +285,7 @@
   .radio-group { display: grid; gap: 8px; }
   .form-check { display: flex; align-items: flex-start; gap: 8px; }
   .form-check-input { margin: 3px 0 0; accent-color: var(--accent); }
-  .form-check-label { font-size: 14px; line-height: 1.4; }
+  .form-check-label { font-size: 14px; line-height: 1.4; grid-template-columns: 1fr; }
 
   .signals-body { padding: 6px 20px 18px; }
   .signals-empty {
@@ -408,10 +414,10 @@
 
     <p class="section-label">DevEx survey</p>
     <div class="panel">
-      <div class="row">
+      <div class="row question">
         <label for="deployFreq">How often does your team successfully deploy code to production?</label>
       </div>
-      <div class="row">
+      <div class="row radio-options">
         <div class="radio-group" id="deployFreq">
           <div class="form-check">
             <input class="form-check-input" type="radio" name="deployFreq" id="deployFreq1" value="On-demand / multiple times per day">
@@ -435,28 +441,50 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <label for="leadTime">Commit → production time</label>
-        <div>
-          <select id="leadTime">
-            <option value="">— select —</option>
-            <option value="Under an hour">Under an hour</option>
-            <option value="Same day">Same day</option>
-            <option value="1-6 days">1-6 days</option>
-            <option value="1-4 weeks">1-4 weeks</option>
-            <option value="More than one month">More than one month</option>
-          </select>
+      <div class="row question">
+        <label for="leadTime">How long does it take from commit to production?</label>
+      </div>
+      <div class="row radio-options">
+        <div class="radio-group" id="leadTime">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="leadTime" id="leadTime1" value="Under an hour">
+            <label class="form-check-label" for="leadTime1">Under an hour</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="leadTime" id="leadTime2" value="Same day">
+            <label class="form-check-label" for="leadTime2">Same day</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="leadTime" id="leadTime3" value="1-6 days">
+            <label class="form-check-label" for="leadTime3">1-6 days</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="leadTime" id="leadTime4" value="1-4 weeks">
+            <label class="form-check-label" for="leadTime4">1-4 weeks</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="leadTime" id="leadTime5" value="More than one month">
+            <label class="form-check-label" for="leadTime5">More than one month</label>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <label for="changeFailureRate">Rollback / hotfix frequency</label>
-        <div>
-          <select id="changeFailureRate">
-            <option value="">— select —</option>
-            <option value="Rarely, less than 2 out of 10 releases">Rarely, less than 2 out of 10 releases</option>
-            <option value="Occasionally, less than 1 out of 3 releases">Occasionally, less than 1 out of 3 releases</option>
-            <option value="Frequently, more than 1 out of 3 releases">Frequently, more than 1 out of 3 releases</option>
-          </select>
+      <div class="row question">
+        <label for="changeFailureRate">How often do you need to roll back or release a hotfix?</label>
+      </div>
+      <div class="row radio-options">
+        <div class="radio-group" id="changeFailureRate">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="changeFailureRate" id="changeFailureRate1" value="Rarely, less than 2 out of 10 releases">
+            <label class="form-check-label" for="changeFailureRate1">Rarely, less than 2 out of 10 releases</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="changeFailureRate" id="changeFailureRate2" value="Occasionally, less than 1 out of 3 releases">
+            <label class="form-check-label" for="changeFailureRate2">Occasionally, less than 1 out of 3 releases</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="changeFailureRate" id="changeFailureRate3" value="Frequently, more than 1 out of 3 releases">
+            <label class="form-check-label" for="changeFailureRate3">Frequently, more than 1 out of 3 releases</label>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -612,8 +640,8 @@
       [ENTRY.kpis, els.kpis.value],
       [ENTRY.notes, els.notes.value],
       [ENTRY.deployFreq, getFieldValue('deployFreq')],
-      [ENTRY.leadTime, els.leadTime.value],
-      [ENTRY.changeFailureRate, els.changeFailureRate.value],
+      [ENTRY.leadTime, getFieldValue('leadTime')],
+      [ENTRY.changeFailureRate, getFieldValue('changeFailureRate')],
       [ENTRY.mttr, els.mttr.value],
       [ENTRY.flowInterrupt, els.flowInterrupt.value],
       [ENTRY.focusTime, els.focusTime.value],
