@@ -39,7 +39,7 @@ AI will **not**:
 
 
 ### Should Have
-- Ability to read and surface insights from linked resources
+- Read in depth the academic resources for the used frameworks
 
 ## 🏆 Background
 
