@@ -32,7 +32,8 @@ AI will **not**:
 
 ### Must Have
 - A conversation starter — something a team member can bring to the team to discuss priorities and value
-- A curated, summarized knowledge base around dev productivity and developer well-being (saving everyone the time of doing this research themselves)
+- Knowledge sharing of common metrics
+- Suggestions based on the most painful areas
 
 ### Should Have
 - Ability to read and surface insights from linked resources
