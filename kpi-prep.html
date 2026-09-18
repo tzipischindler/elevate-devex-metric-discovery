@@ -622,25 +622,43 @@
           <span class="rating-scale-endpoint">Difficult to reach an agreement</span>
         </div>
       </div>
-      <div class="row">
-        <label for="prTurnaround">PR/RFC review turnaround <span class="hint">1 Unacceptably long – 5 Super timely</span></label>
-        <div>
-          <select id="prTurnaround">
-            <option value="">— select —</option>
-            <option value="1">1 — Unacceptably long</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5 — Super timely</option>
-          </select>
+      <div class="row question">
+        <label for="prTurnaround">How would you characterize the time between when you submit a PR or RFC for review and get feedback?</label>
+      </div>
+      <div class="row radio-options">
+        <div class="rating-scale" id="prTurnaround">
+          <span class="rating-scale-endpoint">Unacceptably long</span>
+          <div class="rating-scale-options">
+            <div class="rating-scale-option">
+              <label for="prTurnaround1">1</label>
+              <input type="radio" name="prTurnaround" id="prTurnaround1" value="1">
+            </div>
+            <div class="rating-scale-option">
+              <label for="prTurnaround2">2</label>
+              <input type="radio" name="prTurnaround" id="prTurnaround2" value="2">
+            </div>
+            <div class="rating-scale-option">
+              <label for="prTurnaround3">3</label>
+              <input type="radio" name="prTurnaround" id="prTurnaround3" value="3">
+            </div>
+            <div class="rating-scale-option">
+              <label for="prTurnaround4">4</label>
+              <input type="radio" name="prTurnaround" id="prTurnaround4" value="4">
+            </div>
+            <div class="rating-scale-option">
+              <label for="prTurnaround5">5</label>
+              <input type="radio" name="prTurnaround" id="prTurnaround5" value="5">
+            </div>
+          </div>
+          <span class="rating-scale-endpoint">Super timely</span>
         </div>
       </div>
-      <div class="row">
-        <label for="natureOfWork">Nature of work (past week)</label>
+      <div class="row question">
+        <label for="natureOfWork">Name the nature of the work you completed in the past week</label>
         <div><textarea id="natureOfWork" placeholder="e.g. Commits, code reviews completed, pull requests, design docs written"></textarea></div>
       </div>
-      <div class="row">
-        <label for="qualityWords">3 words: quality/impact/reliability</label>
+      <div class="row question">
+        <label for="qualityWords">Think of the quality, impact and reliability of your work recently, give 3 words to describe it</label>
         <div><input type="text" id="qualityWords" placeholder="e.g. solid, rushed, fragile"></div>
       </div>
     </div>
