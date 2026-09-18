@@ -286,6 +286,22 @@
   .form-check { display: flex; align-items: flex-start; gap: 8px; }
   .form-check-input { margin: 3px 0 0; accent-color: var(--accent); }
   .form-check-label { font-size: 14px; line-height: 1.4; grid-template-columns: 1fr; }
+  .rating-scale {
+    display: grid;
+    grid-template-columns: minmax(90px, 1fr) minmax(0, 3fr) minmax(90px, 1fr);
+    align-items: center;
+    gap: 10px;
+  }
+  .rating-scale-endpoint { font-size: 13px; color: var(--ink-soft); }
+  .rating-scale-endpoint:last-child { text-align: right; }
+  .rating-scale-option { display: grid; justify-items: center; gap: 6px; }
+  .rating-scale-option label { font-size: 13px; color: var(--ink); cursor: pointer; }
+  .rating-scale-option input { margin: 0; accent-color: var(--accent); }
+  @media (max-width: 560px) {
+    .rating-scale { grid-template-columns: 1fr; gap: 8px; }
+    .rating-scale-endpoint:last-child { text-align: left; }
+    .rating-scale-options { display: flex; justify-content: space-between; }
+  }
 
   .signals-body { padding: 6px 20px 18px; }
   .signals-empty {
@@ -487,29 +503,58 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <label for="mttr">Time to restore after downtime</label>
-        <div>
-          <select id="mttr">
-            <option value="">— select —</option>
-            <option value="Under 1 hour">Under 1 hour</option>
-            <option value="Same day, 1-24 hours">Same day, 1-24 hours</option>
-            <option value="From one day to one week">From one day to one week</option>
-            <option value="More than a week">More than a week</option>
-          </select>
+      <div class="row question">
+        <label for="mttr">Think of the last time a service was down in production, how long did it take to restore it?</label>
+      </div>
+      <div class="row radio-options">
+        <div class="radio-group" id="mttr">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mttr" id="mttr1" value="Under 1 hour">
+            <label class="form-check-label" for="mttr1">Under 1 hour</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mttr" id="mttr2" value="Same day, 1-24 hours">
+            <label class="form-check-label" for="mttr2">Same day, 1-24 hours</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mttr" id="mttr3" value="From one day to one week">
+            <label class="form-check-label" for="mttr3">From one day to one week</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="mttr" id="mttr4" value="More than a week">
+            <label class="form-check-label" for="mttr4">More than a week</label>
+          </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row question">
         <label for="flowInterrupt">Minimal interruptions/delays <span class="hint">1 Very unlikely – 5 Very likely</span></label>
-        <div>
-          <select id="flowInterrupt">
-            <option value="">— select —</option>
-            <option value="1">1 — Very unlikely</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5 — Very likely</option>
-          </select>
+      </div>
+      <div class="row radio-options">
+        <div class="rating-scale" id="flowInterrupt">
+          <span class="rating-scale-endpoint">Very unlikely</span>
+          <div class="rating-scale-options">
+            <div class="rating-scale-option">
+              <label for="flowInterrupt1">1</label>
+              <input type="radio" name="flowInterrupt" id="flowInterrupt1" value="1">
+            </div>
+            <div class="rating-scale-option">
+              <label for="flowInterrupt2">2</label>
+              <input type="radio" name="flowInterrupt" id="flowInterrupt2" value="2">
+            </div>
+            <div class="rating-scale-option">
+              <label for="flowInterrupt3">3</label>
+              <input type="radio" name="flowInterrupt" id="flowInterrupt3" value="3">
+            </div>
+            <div class="rating-scale-option">
+              <label for="flowInterrupt4">4</label>
+              <input type="radio" name="flowInterrupt" id="flowInterrupt4" value="4">
+            </div>
+            <div class="rating-scale-option">
+              <label for="flowInterrupt5">5</label>
+              <input type="radio" name="flowInterrupt" id="flowInterrupt5" value="5">
+            </div>
+          </div>
+          <span class="rating-scale-endpoint">Very likely</span>
         </div>
       </div>
       <div class="row">
@@ -642,8 +687,8 @@
       [ENTRY.deployFreq, getFieldValue('deployFreq')],
       [ENTRY.leadTime, getFieldValue('leadTime')],
       [ENTRY.changeFailureRate, getFieldValue('changeFailureRate')],
-      [ENTRY.mttr, els.mttr.value],
-      [ENTRY.flowInterrupt, els.flowInterrupt.value],
+      [ENTRY.mttr, getFieldValue('mttr')],
+      [ENTRY.flowInterrupt, getFieldValue('flowInterrupt')],
       [ENTRY.focusTime, els.focusTime.value],
       [ENTRY.commEase, els.commEase.value],
       [ENTRY.prTurnaround, els.prTurnaround.value],
@@ -755,7 +800,7 @@
     ];
 
     likertChecks.forEach(check => {
-      const val = els[check.key].value;
+      const val = getFieldValue(check.key);
       if (!val) return;
       const concern = likertConcern(val, max, check.reversed);
       if (concern === null) return;
