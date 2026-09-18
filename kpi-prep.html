@@ -137,7 +137,7 @@
 
   .row {
     display: grid;
-    grid-template-columns: 168px 1fr;
+    grid-template-columns: minmax(140px, 30%) minmax(0, 1fr);
     gap: 16px;
     padding: 16px 20px;
     border-bottom: 1px solid var(--border);
@@ -276,6 +276,11 @@
   .scale-row label { font-size: 13px; color: var(--ink-soft); }
   .scale-row select { width: auto; min-width: 100px; }
 
+  .radio-group { display: grid; gap: 8px; }
+  .form-check { display: flex; align-items: flex-start; gap: 8px; }
+  .form-check-input { margin: 3px 0 0; accent-color: var(--accent); }
+  .form-check-label { font-size: 14px; line-height: 1.4; }
+
   .signals-body { padding: 6px 20px 18px; }
   .signals-empty {
     padding: 18px 20px;
@@ -401,19 +406,33 @@
       </div>
     </div>
 
-    <p class="section-label">DEVX SURVEY — ENGINEERING RESPONDENT</p>
+    <p class="section-label">DevEx survey</p>
     <div class="panel">
       <div class="row">
-        <label for="deployFreq">Deploy frequency</label>
-        <div>
-          <select id="deployFreq">
-            <option value="">— select —</option>
-            <option value="On-demand / multiple times per day">On-demand / multiple times per day</option>
-            <option value="Between once a day and once a week">Between once a day and once a week</option>
-            <option value="Between once a week and once a month">Between once a week and once a month</option>
-            <option value="Between once a month and once every six months">Between once a month and once every six months</option>
-            <option value="Fewer than once every six months">Fewer than once every six months</option>
-          </select>
+        <label for="deployFreq">How often does your team successfully deploy code to production?</label>
+      </div>
+      <div class="row">
+        <div class="radio-group" id="deployFreq">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="deployFreq" id="deployFreq1" value="On-demand / multiple times per day">
+            <label class="form-check-label" for="deployFreq1">On-demand / multiple times per day</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="deployFreq" id="deployFreq2" value="Between once a day and once a week">
+            <label class="form-check-label" for="deployFreq2">Between once a day and once a week</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="deployFreq" id="deployFreq3" value="Between once a week and once a month">
+            <label class="form-check-label" for="deployFreq3">Between once a week and once a month</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="deployFreq" id="deployFreq4" value="Between once a month and once every six months">
+            <label class="form-check-label" for="deployFreq4">Between once a month and once every six months</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="deployFreq" id="deployFreq5" value="Fewer than once every six months">
+            <label class="form-check-label" for="deployFreq5">Fewer than once every six months</label>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -592,7 +611,7 @@
       [ENTRY.focus, els.focus.value],
       [ENTRY.kpis, els.kpis.value],
       [ENTRY.notes, els.notes.value],
-      [ENTRY.deployFreq, els.deployFreq.value],
+      [ENTRY.deployFreq, getFieldValue('deployFreq')],
       [ENTRY.leadTime, els.leadTime.value],
       [ENTRY.changeFailureRate, els.changeFailureRate.value],
       [ENTRY.mttr, els.mttr.value],
@@ -607,6 +626,13 @@
     const url = FORM_BASE + '?' + params.toString();
     els.linkOut.value = url;
     els.openLink.href = url;
+  }
+
+  function getFieldValue(id) {
+    const field = els[id];
+    if (field && field.value !== undefined) return field.value;
+    const selected = document.querySelector('input[name="' + id + '"]:checked');
+    return selected ? selected.value : '';
   }
 
   // ---- DevX signal logic (rule-based, grounded in DORA bands + SPACE dims + Wagner & Ruhe factors) ----
@@ -674,7 +700,7 @@
     ];
 
     doraChecks.forEach(check => {
-      const val = els[check.key].value;
+      const val = getFieldValue(check.key);
       if (!val) return;
       const tier = tierFromExact(val, check.tiers);
       const weak = DORA_WEAK_TIERS[tier] === true || tier === 'Unclear';
