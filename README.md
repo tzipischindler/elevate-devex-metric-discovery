@@ -31,9 +31,12 @@ AI will **not**:
 ## 📋 Product Specification (MoSCoW)
 
 ### Must Have
-- A conversation starter — something a team member can bring to the team to discuss priorities and value
+- A conversation starter, a team member can bring the suggested metrics to the team to discuss priorities and value during weekly, sprint and quarterly planning
 - Knowledge sharing of common metrics
-- Suggestions based on the most painful areas
+- Suggestions of which metrics to focus on based on the most painful areas
+- Prepared survey to share with colleagues
+- Collaborate with team members based on the responses
+
 
 ### Should Have
 - Ability to read and surface insights from linked resources
