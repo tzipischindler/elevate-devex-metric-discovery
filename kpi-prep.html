@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KPI Discovery — Field Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F3F6F3;
+    --panel: #FFFFFF;
+    --ink: #17241C;
+    --ink-soft: #56685D;
+    --ink-faint: #8B9A90;
+    --accent: #3C6A57;
+    --accent-soft: #E4EEE7;
+    --gold: #A9812F;
+    --border: #D9E1DB;
+    --border-strong: #B9C6BE;
+    --error: #A3402F;
+    --warn: #A9812F;
+    --warn-soft: #F4EBD6;
+    --ok-soft: #E4EEE7;
+    --shadow: 0 1px 2px rgba(23,36,28,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #101512;
+      --panel: #161D19;
+      --ink: #E8EEE9;
+      --ink-soft: #9FB0A5;
+      --ink-faint: #6C7A72;
+      --accent: #74AB92;
+      --accent-soft: #1D2B23;
+      --gold: #D3AE55;
+      --border: #263029;
+      --border-strong: #364139;
+      --error: #E08972;
+      --warn: #D3AE55;
+      --warn-soft: #2B2417;
+      --ok-soft: #1D2B23;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #101512;
+    --panel: #161D19;
+    --ink: #E8EEE9;
+    --ink-soft: #9FB0A5;
+    --ink-faint: #6C7A72;
+    --accent: #74AB92;
+    --accent-soft: #1D2B23;
+    --gold: #D3AE55;
+    --border: #263029;
+    --border-strong: #364139;
+    --error: #E08972;
+    --warn: #D3AE55;
+    --warn-soft: #2B2417;
+    --ok-soft: #1D2B23;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 40px 20px 80px; }
+
+  .sheet {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .masthead {
+    margin-bottom: 32px;
+  }
+  .masthead .kicker {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    color: var(--gold);
+    margin: 0 0 10px;
+  }
+  .masthead h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 1.15;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .masthead p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: 56ch;
+    margin: 0;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: 0.03em;
+    color: var(--gold);
+    margin: 36px 0 10px;
+  }
+  .section-label:first-of-type { margin-top: 0; }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-head h2 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.01em;
+    color: var(--ink-faint);
+    margin: 0;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 16px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+  .row:last-child { border-bottom: none; }
+  .row label {
+    font-size: 13px;
+    color: var(--ink-soft);
+    padding-top: 9px;
+    line-height: 1.4;
+  }
+  .row .hint {
+    display: block;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+
+  input[type="text"], textarea, select {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14.5px;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    padding: 8px 10px;
+    line-height: 1.5;
+    resize: vertical;
+  }
+  textarea { min-height: 56px; }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-color: var(--accent);
+  }
+  select { appearance: none; background: var(--panel); cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%2356685D'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 28px;
+  }
+
+  .company-row {
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  .company-row .field { flex: 1; }
+  .company-row label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  button {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    border-radius: 2px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    padding: 9px 16px;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:disabled { opacity: 0.55; cursor: default; }
+  .btn-secondary {
+    background: transparent;
+    border-color: var(--border-strong);
+    color: var(--ink);
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    padding: 0 20px 16px;
+    min-height: 1em;
+  }
+  .status.is-error { color: var(--error); }
+
+  .note {
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+    padding: 14px 20px;
+    border-top: 1px dashed var(--border);
+    background: var(--accent-soft);
+    border-radius: 0 0 3px 3px;
+  }
+
+  .link-panel { padding: 20px; }
+  .link-panel label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .link-row {
+    display: flex;
+    gap: 8px;
+  }
+  .link-row input {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+  }
+  .link-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .copy-msg {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--accent);
+    margin-left: 4px;
+    align-self: center;
+  }
+
+  .scale-row {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .scale-row label { font-size: 13px; color: var(--ink-soft); }
+  .scale-row select { width: auto; min-width: 100px; }
+
+  .signals-body { padding: 6px 20px 18px; }
+  .signals-empty {
+    padding: 18px 20px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+  .signal-card {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--warn);
+    border-radius: 2px;
+    padding: 12px 14px;
+    margin: 12px 0;
+    background: var(--warn-soft);
+  }
+  .signal-card.ok {
+    border-left-color: var(--accent);
+    background: var(--ok-soft);
+  }
+  .signal-card .signal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .signal-card .signal-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .signal-card .signal-tier {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .signal-card p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    margin: 6px 0 0;
+  }
+  .signal-card .signal-source {
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-top: 6px;
+    display: block;
+  }
+
+  footer {
+    max-width: 680px;
+    margin: 24px auto 0;
+    font-size: 12px;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
+  @media (max-width: 560px) {
+    .row { grid-template-columns: 1fr; gap: 6px; }
+    .row label { padding-top: 0; }
+    .company-row { flex-direction: column; align-items: stretch; }
+    .link-row { flex-direction: column; }
+    .masthead h1 { font-size: 25px; }
+  }
+</style>
+</head>
+<body>
+  <div class="sheet">
+    <div class="masthead">
+      <p class="kicker">KPI DISCOVERY — FIELD PREP</p>
+      <h1>Prep a company's file, then read the DevX signals</h1>
+      <p>Draft the company case file from Claude's knowledge, log the DevEx survey answers, and see which DORA/SPACE areas look strongest and weakest before you send the link.</p>
+    </div>
+
+    <p class="section-label">COMPANY</p>
+    <div class="panel">
+      <div class="company-row">
+        <div class="field">
+          <label for="companyName">Company name</label>
+          <input type="text" id="companyName" placeholder="e.g. HelloFresh" autocomplete="off">
+        </div>
+        <button class="btn-primary" id="draftBtn" type="button">Draft fields</button>
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h2>CASE FILE</h2></div>
+      <div class="row">
+        <label for="mission">Mission</label>
+        <div><textarea id="mission" placeholder="Company's stated mission…"></textarea></div>
+      </div>
+      <div class="row">
+        <label for="topMetric">What matters most</label>
+        <div><textarea id="topMetric" placeholder="What we're guessing matters most to them…"></textarea></div>
+      </div>
+      <div class="row">
+        <label for="strategy">Strategy</label>
+        <div><textarea id="strategy" placeholder="Guess at their core strategy…"></textarea></div>
+      </div>
+      <div class="row">
+        <label for="revenueModel">Revenue model</label>
+        <div><textarea id="revenueModel" placeholder="Guess at how they make money…"></textarea></div>
+      </div>
+      <div class="row">
+        <label for="focus">Focus</label>
+        <div>
+          <select id="focus">
+            <option value="Customer loyalty / retention">Customer loyalty / retention</option>
+            <option value="New customer acquisition">New customer acquisition</option>
+            <option value="Both equally" selected>Both equally</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="kpis">Suggested KPIs</label>
+        <div><textarea id="kpis" placeholder="3–5 KPIs, comma-separated…"></textarea></div>
+      </div>
+      <div class="row">
+        <label for="notes">Notes <span class="hint">optional</span></label>
+        <div><textarea id="notes" placeholder="Anything else to flag to the respondent…"></textarea></div>
+      </div>
+    </div>
+
+    <p class="section-label">DEVX SURVEY — ENGINEERING RESPONDENT</p>
+    <div class="panel">
+      <div class="row">
+        <label for="deployFreq">Deploy frequency</label>
+        <div>
+          <select id="deployFreq">
+            <option value="">— select —</option>
+            <option value="On-demand / multiple times per day">On-demand / multiple times per day</option>
+            <option value="Between once a day and once a week">Between once a day and once a week</option>
+            <option value="Between once a week and once a month">Between once a week and once a month</option>
+            <option value="Between once a month and once every six months">Between once a month and once every six months</option>
+            <option value="Fewer than once every six months">Fewer than once every six months</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="leadTime">Commit → production time</label>
+        <div>
+          <select id="leadTime">
+            <option value="">— select —</option>
+            <option value="Under an hour">Under an hour</option>
+            <option value="Same day">Same day</option>
+            <option value="1-6 days">1-6 days</option>
+            <option value="1-4 weeks">1-4 weeks</option>
+            <option value="More than one month">More than one month</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="changeFailureRate">Rollback / hotfix frequency</label>
+        <div>
+          <select id="changeFailureRate">
+            <option value="">— select —</option>
+            <option value="Rarely, less than 2 out of 10 releases">Rarely, less than 2 out of 10 releases</option>
+            <option value="Occasionally, less than 1 out of 3 releases">Occasionally, less than 1 out of 3 releases</option>
+            <option value="Frequently, more than 1 out of 3 releases">Frequently, more than 1 out of 3 releases</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="mttr">Time to restore after downtime</label>
+        <div>
+          <select id="mttr">
+            <option value="">— select —</option>
+            <option value="Under 1 hour">Under 1 hour</option>
+            <option value="Same day, 1-24 hours">Same day, 1-24 hours</option>
+            <option value="From one day to one week">From one day to one week</option>
+            <option value="More than a week">More than a week</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="flowInterrupt">Minimal interruptions/delays <span class="hint">1 Very unlikely – 5 Very likely</span></label>
+        <div>
+          <select id="flowInterrupt">
+            <option value="">— select —</option>
+            <option value="1">1 — Very unlikely</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 — Very likely</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="focusTime">Sufficient uninterrupted focus time <span class="hint">1 Strong disagreement – 5 Strong agreement</span></label>
+        <div>
+          <select id="focusTime">
+            <option value="">— select —</option>
+            <option value="1">1 — Strong disagreement</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 — Strong agreement</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="commEase">Ease of communicating within team <span class="hint">1 Reach agreement & move forward – 5 Stuck in disagreement</span></label>
+        <div>
+          <select id="commEase">
+            <option value="">— select —</option>
+            <option value="1">1 — Agreement, move forward</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 — Stuck in disagreement</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="prTurnaround">PR/RFC review turnaround <span class="hint">1 Unacceptably long – 5 Super timely</span></label>
+        <div>
+          <select id="prTurnaround">
+            <option value="">— select —</option>
+            <option value="1">1 — Unacceptably long</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 — Super timely</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <label for="natureOfWork">Nature of work (past week)</label>
+        <div><textarea id="natureOfWork" placeholder="e.g. Commits, code reviews completed, pull requests, design docs written"></textarea></div>
+      </div>
+      <div class="row">
+        <label for="qualityWords">3 words: quality/impact/reliability</label>
+        <div><input type="text" id="qualityWords" placeholder="e.g. solid, rushed, fragile"></div>
+      </div>
+    </div>
+
+    <p class="section-label">DEVX SIGNALS</p>
+    <div class="panel">
+      <div class="panel-head"><h2>WEAKEST AREAS FIRST, GROUNDED IN YOUR DATASET</h2></div>
+      <div class="signals-body" id="signalsBody">
+        <div class="signals-empty">Fill in the DevX survey answers above — this updates as you type.</div>
+      </div>
+    </div>
+
+    <p class="section-label">LINK</p>
+    <div class="panel">
+      <div class="link-panel">
+        <label for="linkOut">Pre-filled form link</label>
+        <div class="link-row">
+          <input type="text" id="linkOut" readonly>
+          <button class="btn-secondary" id="copyBtn" type="button">Copy</button>
+        </div>
+        <div class="link-actions">
+          <a id="openLink" href="#" target="_blank" rel="noopener">
+            <button class="btn-secondary" type="button">Open form</button>
+          </a>
+          <span class="copy-msg" id="copyMsg"></span>
+        </div>
+      </div>
+      <div class="note">Nothing here submits the form — it only builds a link with these answers pre-loaded. Review every field before sending it to a respondent.</div>
+    </div>
+  </div>
+
+  <footer>Fields map to a fixed Google Form. Edit any answer above and the link and signals update.</footer>
+
+<script>
+(function () {
+  const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfo4a8Pu6MueTZPZMuBPnC1mI3Tj48QXzfmrFUKGFQJudruNA/viewform";
+  const ENTRY = {
+    company: "entry.61919964",
+    mission: "entry.822772767",
+    topMetric: "entry.1570846243",
+    strategy: "entry.1944856025",
+    revenueModel: "entry.2075654105",
+    focus: "entry.1319920343",
+    kpis: "entry.100468792",
+    notes: "entry.96949341",
+    deployFreq: "entry.698040889",
+    leadTime: "entry.356411419",
+    changeFailureRate: "entry.1252328683",
+    mttr: "entry.1432422721",
+    flowInterrupt: "entry.1307372656",
+    focusTime: "entry.999476186",
+    commEase: "entry.1507529450",
+    prTurnaround: "entry.1840675321",
+    natureOfWork: "entry.156464442",
+    qualityWords: "entry.151654674"
+  };
+
+  const ids = ['companyName','mission','topMetric','strategy','revenueModel','focus','kpis','notes',
+    'deployFreq','leadTime','changeFailureRate','mttr','flowInterrupt','focusTime','commEase','prTurnaround',
+    'natureOfWork','qualityWords'];
+  const els = {};
+  ids.forEach(id => { els[id] = document.getElementById(id); });
+  els.linkOut = document.getElementById('linkOut');
+  els.copyBtn = document.getElementById('copyBtn');
+  els.copyMsg = document.getElementById('copyMsg');
+  els.openLink = document.getElementById('openLink');
+  els.draftBtn = document.getElementById('draftBtn');
+  els.status = document.getElementById('status');
+  els.signalsBody = document.getElementById('signalsBody');
+
+  function buildLink() {
+    const params = new URLSearchParams();
+    params.set('usp', 'pp_url');
+    const fieldMap = [
+      [ENTRY.company, els.companyName.value],
+      [ENTRY.mission, els.mission.value],
+      [ENTRY.topMetric, els.topMetric.value],
+      [ENTRY.strategy, els.strategy.value],
+      [ENTRY.revenueModel, els.revenueModel.value],
+      [ENTRY.focus, els.focus.value],
+      [ENTRY.kpis, els.kpis.value],
+      [ENTRY.notes, els.notes.value],
+      [ENTRY.deployFreq, els.deployFreq.value],
+      [ENTRY.leadTime, els.leadTime.value],
+      [ENTRY.changeFailureRate, els.changeFailureRate.value],
+      [ENTRY.mttr, els.mttr.value],
+      [ENTRY.flowInterrupt, els.flowInterrupt.value],
+      [ENTRY.focusTime, els.focusTime.value],
+      [ENTRY.commEase, els.commEase.value],
+      [ENTRY.prTurnaround, els.prTurnaround.value],
+      [ENTRY.natureOfWork, els.natureOfWork.value],
+      [ENTRY.qualityWords, els.qualityWords.value]
+    ];
+    fieldMap.forEach(([key, val]) => { if (val) params.set(key, val); });
+    const url = FORM_BASE + '?' + params.toString();
+    els.linkOut.value = url;
+    els.openLink.href = url;
+  }
+
+  // ---- DevX signal logic (rule-based, grounded in DORA bands + SPACE dims + Wagner & Ruhe factors) ----
+  // Exact-match against this form's real option text (captured from the live Google Form).
+  function tierFromExact(value, map) {
+    if (!value) return null;
+    return map[value] || 'Unclear';
+  }
+
+  const DORA_SOURCE = "DORA / Accelerate State of DevOps research (Forsgren et al.)";
+  const SPACE_SOURCE = "SPACE framework (Forsgren, Storey, Maddila, Zimmermann, Houck, Butler)";
+  const WR_SOURCE = "Wagner & Ruhe, productivity factors review (arXiv:1801.06475)";
+
+  const DEPLOY_TIERS = {
+    "On-demand / multiple times per day": "Elite",
+    "Between once a day and once a week": "High",
+    "Between once a week and once a month": "Medium",
+    "Between once a month and once every six months": "Low",
+    "Fewer than once every six months": "Low"
+  };
+  const LEAD_TIME_TIERS = {
+    "Under an hour": "Elite",
+    "Same day": "Elite",
+    "1-6 days": "High",
+    "1-4 weeks": "Medium",
+    "More than one month": "Low"
+  };
+  const CFR_TIERS = {
+    "Rarely, less than 2 out of 10 releases": "Elite/High",
+    "Occasionally, less than 1 out of 3 releases": "Medium",
+    "Frequently, more than 1 out of 3 releases": "Low"
+  };
+  const MTTR_TIERS = {
+    "Under 1 hour": "Elite",
+    "Same day, 1-24 hours": "High",
+    "From one day to one week": "Medium",
+    "More than a week": "Low"
+  };
+
+  const DORA_WEAK_TIERS = { 'Medium': true, 'Low': true, 'Unclear': false };
+
+  // Most Likert items: low score = concern. commEase is reversed on this form
+  // (1 = reach agreement / good, 5 = stuck in disagreement / bad).
+  function likertConcern(valueStr, max, reversed) {
+    const v = parseFloat(valueStr);
+    if (isNaN(v)) return null;
+    const midpoint = max / 2;
+    return reversed ? v > midpoint : v <= midpoint;
+  }
+
+  function buildSignals() {
+    const max = 5;
+    const signals = [];
+
+    // DORA metrics — exact match against this form's real option text
+    const doraChecks = [
+      { key: 'deployFreq', label: 'Deployment Frequency', tiers: DEPLOY_TIERS, source: DORA_SOURCE,
+        advice: "Investigate release batching and deploy tooling — Wagner & Ruhe's 'Use of Modern Development Practices' and 'Use of Software Tools' factors track closely with cadence. Smaller batches and trunk-based development are the usual path from Medium/Low toward High." },
+      { key: 'leadTime', label: 'Lead Time for Changes', tiers: LEAD_TIME_TIERS, source: DORA_SOURCE,
+        advice: "Lead time is usually dominated by review queue wait, not coding or CI time. Check PR turnaround and requirements stability (Wagner & Ruhe) before assuming a tooling problem." },
+      { key: 'changeFailureRate', label: 'Change Failure Rate', tiers: CFR_TIERS, source: DORA_SOURCE,
+        advice: "High failure rates often trace to test coverage gaps or requirements churn. Wagner & Ruhe's 'Requirements Stability' and 'Use of Modern Development Practices' factors are the relevant levers." },
+      { key: 'mttr', label: 'Mean Time to Restore', tiers: MTTR_TIERS, source: DORA_SOURCE,
+        advice: "Slow restores usually point to observability or on-call/escalation gaps rather than engineer skill. Wagner & Ruhe's 'Telecommunication Facilities' and 'Manager Capability' factors are worth checking." }
+    ];
+
+    doraChecks.forEach(check => {
+      const val = els[check.key].value;
+      if (!val) return;
+      const tier = tierFromExact(val, check.tiers);
+      const weak = DORA_WEAK_TIERS[tier] === true || tier === 'Unclear';
+      signals.push({
+        title: check.label,
+        tier: tier === 'Unclear' ? 'Tier unclear' : tier + ' tier',
+        weak: weak,
+        body: weak ? check.advice : "This is tracking at a strong DORA tier — keep an eye on it, but it's not a priority right now.",
+        source: check.source,
+        raw: val
+      });
+    });
+
+    // SPACE Likert items (1-5 scale, matching the live form)
+    const likertChecks = [
+      { key: 'flowInterrupt', label: 'Efficiency & Flow — interruptions', source: SPACE_SOURCE, reversed: false,
+        advice: "Low scores here map to Wagner & Ruhe's 'Time Fragmentation' and 'E-Factor' — the ratio of uninterrupted to body-present hours. Consider protected focus blocks and trimming meeting load." },
+      { key: 'focusTime', label: 'Efficiency & Flow — focus time', source: SPACE_SOURCE, reversed: false,
+        advice: "Same dimension as interruptions. If both this and interruptions score low, focus time is a strong candidate for the first thing to fix." },
+      { key: 'commEase', label: 'Communication & Collaboration', source: SPACE_SOURCE, reversed: true,
+        advice: "High scores here (stuck in disagreement) line up with Wagner & Ruhe's 'Communication' factor — one of the more consistently cited soft factors. Look at decision-making process and how disagreements get resolved." },
+      { key: 'prTurnaround', label: 'Efficiency & Flow — review turnaround', source: SPACE_SOURCE + " (proxy for DORA lead time)", reversed: false,
+        advice: "Slow review turnaround is usually the single biggest driver of long lead times. Consider review SLAs or smaller PRs as a first lever." }
+    ];
+
+    likertChecks.forEach(check => {
+      const val = els[check.key].value;
+      if (!val) return;
+      const concern = likertConcern(val, max, check.reversed);
+      if (concern === null) return;
+      signals.push({
+        title: check.label,
+        tier: val + ' / ' + max,
+        weak: concern,
+        body: concern ? check.advice : "Not a priority right now based on this score.",
+        source: check.source,
+        raw: val
+      });
+    });
+
+    return signals;
+  }
+
+  function renderSignals() {
+    const signals = buildSignals();
+    if (signals.length === 0) {
+      els.signalsBody.innerHTML = '<div class="signals-empty">Fill in the DevX survey answers above — this updates as you type.</div>';
+      return;
+    }
+    const weak = signals.filter(s => s.weak);
+    const ok = signals.filter(s => !s.weak);
+    const ordered = weak.concat(ok);
+    const top = ordered.slice(0, Math.max(3, weak.length));
+
+    let html = '';
+    top.forEach(s => {
+      html += '<div class="signal-card' + (s.weak ? '' : ' ok') + '">' +
+        '<div class="signal-head"><span class="signal-title">' + escapeHtml(s.title) + '</span>' +
+        '<span class="signal-tier">' + escapeHtml(s.tier) + '</span></div>' +
+        '<p>' + escapeHtml(s.body) + '</p>' +
+        '<span class="signal-source">Source: ' + escapeHtml(s.source) + '</span>' +
+        '</div>';
+    });
+    els.signalsBody.innerHTML = html;
+  }
+
+  function escapeHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function refreshAll() {
+    buildLink();
+    renderSignals();
+  }
+
+  ids.forEach(id => {
+    els[id].addEventListener('input', refreshAll);
+    els[id].addEventListener('change', refreshAll);
+  });
+  refreshAll();
+
+  els.copyBtn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(els.linkOut.value);
+      els.copyMsg.textContent = 'Copied.';
+    } catch (e) {
+      els.linkOut.select();
+      els.copyMsg.textContent = 'Select the text and copy manually.';
+    }
+    setTimeout(() => { els.copyMsg.textContent = ''; }, 2500);
+  });
+
+  function setStatus(text, isError) {
+    els.status.textContent = text || '';
+    els.status.classList.toggle('is-error', !!isError);
+  }
+
+  let sampleFn = null;
+  (async () => {
+    try {
+      sampleFn = await claude.use('sample');
+      if (!sampleFn) {
+        setStatus('Drafting isn\u2019t available in this view \u2014 fill in the case file by hand below.');
+      }
+    } catch (e) {
+      sampleFn = null;
+      setStatus('Drafting isn\u2019t available in this view \u2014 fill in the case file by hand below.');
+    }
+  })();
+
+  els.draftBtn.addEventListener('click', async () => {
+    const company = els.companyName.value.trim();
+    if (!company) {
+      setStatus('Enter a company name first.', true);
+      return;
+    }
+    if (!sampleFn) {
+      setStatus('Drafting isn\u2019t available in this view \u2014 fill in the case file by hand.', true);
+      return;
+    }
+    els.draftBtn.disabled = true;
+    setStatus('Drafting from general knowledge\u2026');
+
+    const prompt = `You are helping prepare a business worksheet about the company "${company}" for a colleague to review before sending it out.
+
+From your general knowledge of this company (you have no live web access here), provide your best-effort draft for each of these:
+- mission: the company's stated mission or purpose, 1-2 sentences
+- top_metric: a short guess at the single thing that matters most to this company's success, phrased as a plain statement (not a question)
+- strategy: a brief guess at the company's core business strategy, 2-3 sentences
+- revenue_model: a brief guess at how the company makes money, 2-3 sentences
+- focus: exactly one of these three strings, whichever best fits: "Customer loyalty / retention", "New customer acquisition", "Both equally"
+- kpis: 3 to 5 suggested KPIs for tracking this company's success, as one comma-separated string
+
+If you don't have reliable knowledge of this company, write "Not enough reliable information \u2014 please fill in manually." in the relevant text fields instead of guessing, and still pick a reasonable default for focus.
+
+Respond with ONLY a JSON object with exactly these keys: mission, top_metric, strategy, revenue_model, focus, kpis. No markdown formatting, no commentary, no code fences.`;
+
+    try {
+      const result = await sampleFn.json(prompt, { modelTier: 'default' });
+      const data = (result && result.mission !== undefined) ? result : (result && result.json) || result;
+      els.mission.value = data.mission || '';
+      els.topMetric.value = data.top_metric || '';
+      els.strategy.value = data.strategy || '';
+      els.revenueModel.value = data.revenue_model || '';
+      if (data.focus && ['Customer loyalty / retention','New customer acquisition','Both equally'].includes(data.focus)) {
+        els.focus.value = data.focus;
+      }
+      els.kpis.value = data.kpis || '';
+      refreshAll();
+      setStatus('Drafted \u2014 review and edit before sending.');
+    } catch (err) {
+      const code = err && err.code;
+      if (code === 'not_granted') {
+        setStatus('Drafting access wasn\u2019t granted \u2014 fill in the case file by hand.', true);
+      } else if (code === 'rate_limited') {
+        setStatus('Rate limited \u2014 wait a moment and try again.', true);
+      } else {
+        setStatus('Couldn\u2019t draft that \u2014 fill in the case file by hand.', true);
+      }
+    } finally {
+      els.draftBtn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>
