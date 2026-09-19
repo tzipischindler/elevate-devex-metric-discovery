@@ -4,7 +4,7 @@
 
 ## 💡 The Problem
 
-We all want to have an impact and do work that matters — but technical debt conversations are hard. They're often too technical, too vague, or disconnected from business value. The result? Teams struggle to prioritize, trust breaks down, and developer experience suffers.
+Tech debt alone isn't what makes for an inhabitable working environment in engineering organizations, it is when we also don't have the culture of respect and collaboration, that we can talk about it and reach agreements
 
 ## 🎯 Our Approach
 
