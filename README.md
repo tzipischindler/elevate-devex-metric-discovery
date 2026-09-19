@@ -5,7 +5,8 @@
 ## 💡 The Problem
 
 TL;DR: 
-Tech debt alone isn't what makes for an inhabitable environment in engineering organizations, it is when we also don't have the culture of respect and collaboration, that we can talk about it and reach agreements. These conversations need to happen once a product idea is validated and a product needs to scale. 
+Tech debt alone isn't what makes for an inhabitable environment in engineering organizations, it is when we also don't have the culture of respect and collaboration, that we can talk about it and reach agreements. 
+These conversations need to happen once a product idea is validated and a product needs to scale, so it does not become a user visible problem and impact our business outcome, in addition to the impact on our engineering culture of sustainable delivery and psychological safety, especially when a team is still forming. 
 
 In my research tech debt was framed as a speed vs. quality trade-off highlighting the role of product organization in creating this debt, as well as making the space to address when an organization decided a product idea is validated and wants to scale.
 
