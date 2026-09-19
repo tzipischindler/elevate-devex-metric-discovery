@@ -19,10 +19,10 @@ We simplify the conversation around tech debt by focusing on **why** — not how
 
 ## 🤖 The Role of AI
 
-AI in this project is here to:
-- ✅ Help team members learn new skills
-- ✅ Create automations that reduce friction for users
-- ✅ Bring fresh perspectives and reduce cognitive load
+AI in this project played this role:
+- ✅ Helped hackathon team members learn new skills
+- ✅ Discover automations that reduce friction for users
+- ✅ Summarize useful resources that researched this field and reduce cognitive load 
 
 AI will **not**:
 - ❌ Make decisions for your team
