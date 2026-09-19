@@ -4,7 +4,18 @@
 
 ## 💡 The Problem
 
-Tech debt alone isn't what makes for an inhabitable working environment in engineering organizations, it is when we also don't have the culture of respect and collaboration, that we can talk about it and reach agreements
+TL;DR: 
+Tech debt alone isn't what makes for an inhabitable environment in engineering organizations, it is when we also don't have the culture of respect and collaboration, that we can talk about it and reach agreements. But, it is difficult for both members of engineering and product orgs to speak of the impact of addressing tech debt, except it has to be done, only when it is already having a highly negative impact on the business the value becomes clear. 
+
+In my research tech debt was framed as a speed vs. quality trade-off highlighting the role of product organization in creating this debt.
+
+A distinction was made between a "lighter" and "heavier" type of debt. When lighter can be not following best security practices such as updating certificates by industry standard timeframe, or delaying an update on a library we use, and heavy tech debt is releasing code to production without a system in place to roll back or automated tests. 
+
+Among my interviewers, engineers, architects and managers, I found an agreement that technical debt should be discussed as a team how to approach it, and that at times it is escalated to the manager to make the decision, but it isn't always clear to the manager what is the day to day cost of living with the tech debt.
+
+There is a distinction between managers and engineers in pinpointing the common sources for tech debt, where from the manager perspective tech debt is a side effect of disorganization on the product side, where maybe we don't evaluate well the value of a demo, or know if to say that the product strategy pivot succeeded, leaving engineering teams to maintain half baked code. I would only guess that this is related to the type of topics that are escalated to executives, vs. the more common technical debt tasks that leadership doesn't even need to be aware of. 
+
+Respondents reported that addressing debt unlocked velocity and flexibility for the business that could be felt immediately.
 
 ## 🎯 Our Approach
 
