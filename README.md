@@ -29,7 +29,7 @@ Let’s clarify where this is happening and how it is impacting us, if we agree 
 
 ## 🚫 What We Don't Do
 
-- We don't tell you *how* to fix technical debt (maybe later?)
+- We don't tell you *how* to fix technical debt
 - We don't replace human conversations or decision-making
 
 ## 🤖 The Role of AI
