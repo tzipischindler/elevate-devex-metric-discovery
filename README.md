@@ -8,7 +8,11 @@ Tech debt alone isn't what makes for an inhabitable working environment in engin
 
 ## 🎯 Our Approach
 
-We simplify the conversation around tech debt by focusing on **why** — not how. Instead of diving into implementation details, we help teams evaluate whether addressing a piece of tech debt is worth doing **now, later, or not at all** — grounded in real business outcomes.
+We all want to have an impact and want to do something that matters, but we also have our blind spots. Let's see how we create a more inclusive and open discussion around tech debt so we can find the path to better products, grounded in business outcomes. 
+
+Let’s address the elephant in the room that we are not talking about, and it is that much of our technical debt is product debt, where we didn't fully flesh out if the idea proved itself, that we rushed to write code for, and hence leave devs maintaining code that might not be serving the business. 
+
+Let’s clarify where this is happening and how it is impacting us, if we agree we have a problem, we are on the path to addressing it. 
 
 **We build trust by talking about delivering value.**
 
