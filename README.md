@@ -10,9 +10,7 @@ These conversations need to happen once a product idea is validated and a produc
 
 In my research tech debt was framed as a speed vs. quality trade-off highlighting the role of product organization in creating this debt, as well as the role of product in making the space in the plan to address this when an organization decided a product idea is validated and wants to scale.
 
-A distinction was made between a "lighter" and "heavier" type of debt. When lighter can be not following best security practices such as updating certificates by industry standard timeframe, or delaying an update on a library we use. Heavy tech debt is releasing code to production without a system in place to roll back, or when lacking automated tests. 
-
-Among my interviewers, engineers, architects and managers, I found an agreement that technical debt should be discussed as a team how to approach it, and that at times it is escalated to the manager to make the decision, but it isn't always clear to the manager what is the day to day cost of living with the tech debt.
+Among my interviewers, engineers, architects and managers, I found an agreement that how to address technical debt should be discussed as a team, and that at times it is escalated to the manager to make the decision, but it isn't always clear to the manager what is the day to day cost of living with the tech debt.
 
 There is a distinction between managers and engineers in pinpointing the common sources for tech debt, where from the manager perspective tech debt is a side effect of disorganization on the product side, where maybe we don't evaluate well the value of a demo, or know if to say that the product strategy pivot succeeded, leaving engineering teams to maintain half baked code. I would only guess that this is related to the type of topics that are escalated to executives, vs. the more common technical debt tasks that leadership doesn't even need to be aware of. 
 
