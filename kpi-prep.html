@@ -669,8 +669,8 @@
         <label>What describes best your company's strategy</label>
         <div class="radio-group" id="strategy">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="strategy" id="strategy1" value="Low cost SaaS provider of a product of our kind">
-            <label class="form-check-label" for="strategy1">Low cost SaaS provider of a product of our kind</label>
+            <input class="form-check-input" type="radio" name="strategy" id="strategy1" value="Lowest cost SaaS provider of a product of our kind">
+            <label class="form-check-label" for="strategy1">Lowest cost SaaS provider of a product of our kind</label>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="strategy" id="strategy2" value="Differentiation by higher quality UX/UI">
@@ -878,17 +878,27 @@
     ];
 
     const goal = getFieldValue('focus');
+    const strategy = getFieldValue('strategy');
+    const isReliabilityStrategy = strategy === 'Differentiation by reliability/uptime';
 
     doraChecks.forEach(check => {
       const val = getFieldValue(check.key);
       if (!val) return;
       const tier = tierFromExact(val, check.tiers);
       const weak = isRetentionWeightedWeak(tier, goal, check.key);
+      const weightedWeak = isReliabilityStrategy && (check.key === 'changeFailureRate' || check.key === 'mttr')
+        ? weak || ['High', 'Medium', 'Low'].includes(tier)
+        : weak;
+      const body = weightedWeak
+        ? isReliabilityStrategy && (check.key === 'changeFailureRate' || check.key === 'mttr')
+          ? "This is especially important for a reliability-led strategy. Customers notice faults and recovery speed directly, so these are high-priority operational signals to address first."
+          : check.advice
+        : "This is tracking at a strong DORA tier — keep an eye on it, but it's not a priority right now.";
       signals.push({
         title: check.label,
         tier: tier === 'Unclear' ? 'Tier unclear' : tier + ' tier',
-        weak: weak,
-        body: weak ? check.advice : "This is tracking at a strong DORA tier — keep an eye on it, but it's not a priority right now.",
+        weak: weightedWeak,
+        body: body,
         source: check.source,
         raw: val
       });
@@ -939,13 +949,15 @@
     const techDebt = getFieldValue('techDebt');
     if (techDebt) {
       const grade = TECH_DEBT_TIERS[techDebt] || 'Unclear';
+      const isLowestCostStrategy = getFieldValue('strategy') === 'Lowest cost SaaS provider of a product of our kind';
       const weak = TECH_DEBT_WEAK_GRADES[grade] === true || grade === 'Unclear';
+      const weightedWeak = isLowestCostStrategy ? weak || ['C', 'D', 'E'].includes(grade) || grade === 'B' : weak;
       signals.push({
         title: 'Tech Debt Ratio (% time lost)',
         tier: grade === 'Unclear' ? 'Grade unclear' : 'SQALE grade ' + grade,
-        weak: weak,
-        body: weak
-          ? "This self-reported share of time lost to debt lands in SQALE's C-E range (11%+) — the point where remediation cost is a material fraction of what the team spends building new things. Wagner & Ruhe's 'Legacy code friction' and 'architectural communication gaps' are the usual underlying causes; this is also the direct input to your Total Cost of Build estimate."
+        weak: weightedWeak,
+        body: weightedWeak
+          ? "This self-reported share of time lost to debt lands in SQALE's C-E range (11%+) — the point where remediation cost is a material fraction of what the team spends building new things. In a lowest-cost strategy, this becomes especially important because debt compounds your cost-to-serve and slows your ability to keep prices competitive. Wagner & Ruhe's 'Legacy code friction' and 'architectural communication gaps' are the usual underlying causes; this is also the direct input to your Total Cost of Build estimate."
           : "This is tracking at a healthy SQALE grade (A/B, under 10%) — keep monitoring, but it's not a priority right now.",
         source: SQALE_SOURCE + "; " + WR_SOURCE,
         raw: techDebt
