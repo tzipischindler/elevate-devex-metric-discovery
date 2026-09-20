@@ -20,9 +20,9 @@ Respondents reported that addressing debt unlocked velocity and flexibility for 
 
 ## 🎯 Our Approach
 
-We all want to have an impact and want to do something that matters, but we also have our blind spots. Let's see how we create a more inclusive and open discussion around tech debt so we can find the path to better products, grounded in business outcomes. 
+Let's see how we create a more inclusive and open discussion around tech debt, so we can find the path to better products, grounded in business outcomes. 
 
-Let’s address the elephant in the room that we are not talking about, and it is that much of our technical debt is product debt, where we didn't fully flesh out if the idea proved itself, that we rushed to write code for, and hence leave devs maintaining code that might not be serving the business. 
+Much of our technical debt is product debt, where we didn't fully flesh out the product, if the idea proved itself and hence leave devs maintaining code that might not be serving the business. 
 
 Let’s clarify where this is happening and how it is impacting us, if we agree we have a problem, we are on the path to addressing it. 
 
@@ -30,7 +30,7 @@ Let’s clarify where this is happening and how it is impacting us, if we agree 
 
 ## 🚫 What We Don't Do
 
-- We don't tell you *how* to fix technical debt
+- We can't reliably tell you *how* to fix technical debt based on the given input
 - We don't replace human conversations or decision-making
 
 ## 🤖 The Role of AI
