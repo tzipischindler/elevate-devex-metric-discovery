@@ -225,15 +225,6 @@
   }
   .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
 
-  .status {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 12px;
-    color: var(--ink-faint);
-    padding: 0 20px 16px;
-    min-height: 1em;
-  }
-  .status.is-error { color: var(--error); }
-
   .note {
     font-size: 12.5px;
     color: var(--ink-faint);
@@ -378,7 +369,7 @@
     <div class="masthead">
       <p class="kicker">DevEx KPI Discovery</p>
       <h1>Let's start talking!</h1>
-      <p>Better understand what gets in the way of your team delivering and work together on health metrics based on highest impact.</p>
+          <p>Answer a few structured questions about your team and get a short list of health metrics worth discussing together.</p>
     </div>
 
     <p class="section-label">COMPANY</p>
@@ -388,29 +379,11 @@
           <label for="companyName">Company name</label>
           <input type="text" id="companyName" placeholder="e.g. HelloFresh" autocomplete="off">
         </div>
-        <button class="btn-primary" id="draftBtn" type="button">Draft fields</button>
       </div>
-      <div class="status" id="status"></div>
     </div>
 
     <div class="panel">
       <div class="panel-head"><h2>About our business</h2></div>
-      <div class="row">
-        <label for="mission">Mission</label>
-        <div><textarea id="mission" placeholder="Company's stated mission…"></textarea></div>
-      </div>
-      <div class="row">
-        <label for="topMetric">What matters most</label>
-        <div><textarea id="topMetric" placeholder="What matters most to them…"></textarea></div>
-      </div>
-      <div class="row">
-        <label for="strategy">Strategy</label>
-        <div><textarea id="strategy" placeholder="Company's core strategy…"></textarea></div>
-      </div>
-      <div class="row">
-        <label for="revenueModel">Revenue model</label>
-        <div><textarea id="revenueModel" placeholder="How we make money…"></textarea></div>
-      </div>
       <div class="row">
         <label for="focus">Focus</label>
         <div>
@@ -420,14 +393,6 @@
             <option value="Both equally" selected>Both equally</option>
           </select>
         </div>
-      </div>
-      <div class="row">
-        <label for="kpis">Suggested Company KPIs</label>
-        <div><textarea id="kpis" placeholder="Company's KPIs based on strategy, focus and revenue model"></textarea></div>
-      </div>
-      <div class="row">
-        <label for="notes">Notes <span class="hint">optional</span></label>
-        <div><textarea id="notes" placeholder="Anything else to flag to the respondent…"></textarea></div>
       </div>
     </div>
 
@@ -654,12 +619,58 @@
         </div>
       </div>
       <div class="row question">
-        <label for="natureOfWork">Name the nature of the work you completed in the past week</label>
-        <div><textarea id="natureOfWork" placeholder="e.g. Commits, code reviews completed, pull requests, design docs written"></textarea></div>
+        <label for="goalClarity">I understand how my work contributes to our team's goals</label>
+      </div>
+      <div class="row radio-options">
+        <div class="rating-scale" id="goalClarity">
+          <span class="rating-scale-endpoint">Strong disagreement</span>
+          <div class="rating-scale-options">
+            <div class="rating-scale-option">
+              <label for="goalClarity1">1</label>
+              <input type="radio" name="goalClarity" id="goalClarity1" value="1">
+            </div>
+            <div class="rating-scale-option">
+              <label for="goalClarity2">2</label>
+              <input type="radio" name="goalClarity" id="goalClarity2" value="2">
+            </div>
+            <div class="rating-scale-option">
+              <label for="goalClarity3">3</label>
+              <input type="radio" name="goalClarity" id="goalClarity3" value="3">
+            </div>
+            <div class="rating-scale-option">
+              <label for="goalClarity4">4</label>
+              <input type="radio" name="goalClarity" id="goalClarity4" value="4">
+            </div>
+            <div class="rating-scale-option">
+              <label for="goalClarity5">5</label>
+              <input type="radio" name="goalClarity" id="goalClarity5" value="5">
+            </div>
+          </div>
+          <span class="rating-scale-endpoint">Strong agreement</span>
+        </div>
       </div>
       <div class="row question">
-        <label for="qualityWords">Think of the quality, impact and reliability of your work recently, give 3 words to describe it</label>
-        <div><input type="text" id="qualityWords" placeholder="e.g. solid, rushed, fragile"></div>
+        <label for="unplannedWork">How often does unexpected work disrupt your team's planned priorities?</label>
+      </div>
+      <div class="row radio-options">
+        <div class="radio-group" id="unplannedWork">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="unplannedWork" id="unplannedWork1" value="Rarely">
+            <label class="form-check-label" for="unplannedWork1">Rarely</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="unplannedWork" id="unplannedWork2" value="Sometimes">
+            <label class="form-check-label" for="unplannedWork2">Sometimes</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="unplannedWork" id="unplannedWork3" value="Often">
+            <label class="form-check-label" for="unplannedWork3">Often</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="unplannedWork" id="unplannedWork4" value="Almost always">
+            <label class="form-check-label" for="unplannedWork4">Almost always</label>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -697,13 +708,7 @@
   const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfo4a8Pu6MueTZPZMuBPnC1mI3Tj48QXzfmrFUKGFQJudruNA/viewform";
   const ENTRY = {
     company: "entry.61919964",
-    mission: "entry.822772767",
-    topMetric: "entry.1570846243",
-    strategy: "entry.1944856025",
-    revenueModel: "entry.2075654105",
     focus: "entry.1319920343",
-    kpis: "entry.100468792",
-    notes: "entry.96949341",
     deployFreq: "entry.698040889",
     leadTime: "entry.356411419",
     changeFailureRate: "entry.1252328683",
@@ -712,21 +717,17 @@
     focusTime: "entry.999476186",
     commEase: "entry.1507529450",
     prTurnaround: "entry.1840675321",
-    natureOfWork: "entry.156464442",
-    qualityWords: "entry.151654674"
   };
 
-  const ids = ['companyName','mission','topMetric','strategy','revenueModel','focus','kpis','notes',
+  const ids = ['companyName','focus',
     'deployFreq','leadTime','changeFailureRate','mttr','flowInterrupt','focusTime','commEase','prTurnaround',
-    'natureOfWork','qualityWords'];
+    'goalClarity','unplannedWork'];
   const els = {};
   ids.forEach(id => { els[id] = document.getElementById(id); });
   els.linkOut = document.getElementById('linkOut');
   els.copyBtn = document.getElementById('copyBtn');
   els.copyMsg = document.getElementById('copyMsg');
   els.openLink = document.getElementById('openLink');
-  els.draftBtn = document.getElementById('draftBtn');
-  els.status = document.getElementById('status');
   els.signalsBody = document.getElementById('signalsBody');
 
   function buildLink() {
@@ -734,13 +735,7 @@
     params.set('usp', 'pp_url');
     const fieldMap = [
       [ENTRY.company, els.companyName.value],
-      [ENTRY.mission, els.mission.value],
-      [ENTRY.topMetric, els.topMetric.value],
-      [ENTRY.strategy, els.strategy.value],
-      [ENTRY.revenueModel, els.revenueModel.value],
       [ENTRY.focus, els.focus.value],
-      [ENTRY.kpis, els.kpis.value],
-      [ENTRY.notes, els.notes.value],
       [ENTRY.deployFreq, getFieldValue('deployFreq')],
       [ENTRY.leadTime, getFieldValue('leadTime')],
       [ENTRY.changeFailureRate, getFieldValue('changeFailureRate')],
@@ -748,9 +743,7 @@
       [ENTRY.flowInterrupt, getFieldValue('flowInterrupt')],
       [ENTRY.focusTime, getFieldValue('focusTime')],
       [ENTRY.commEase, getFieldValue('commEase')],
-      [ENTRY.prTurnaround, els.prTurnaround.value],
-      [ENTRY.natureOfWork, els.natureOfWork.value],
-      [ENTRY.qualityWords, els.qualityWords.value]
+      [ENTRY.prTurnaround, getFieldValue('prTurnaround')]
     ];
     fieldMap.forEach(([key, val]) => { if (val) params.set(key, val); });
     const url = FORM_BASE + '?' + params.toString();
@@ -853,7 +846,9 @@
       { key: 'commEase', label: 'Communication & Collaboration', source: SPACE_SOURCE, reversed: true,
         advice: "High scores here (stuck in disagreement) line up with Wagner & Ruhe's 'Communication' factor — one of the more consistently cited soft factors. Look at decision-making process and how disagreements get resolved." },
       { key: 'prTurnaround', label: 'Efficiency & Flow — review turnaround', source: SPACE_SOURCE + " (proxy for DORA lead time)", reversed: false,
-        advice: "Slow review turnaround is usually the single biggest driver of long lead times. Consider review SLAs or smaller PRs as a first lever." }
+        advice: "Slow review turnaround is usually the single biggest driver of long lead times. Consider review SLAs or smaller PRs as a first lever." },
+      { key: 'goalClarity', label: 'Suggested metric — goal alignment / satisfaction', source: SPACE_SOURCE, reversed: false,
+        advice: "Low goal clarity can weaken satisfaction and make performance harder to interpret. Track a goal-alignment score and connect team work to a small set of visible product outcomes." }
     ];
 
     likertChecks.forEach(check => {
@@ -870,6 +865,19 @@
         raw: val
       });
     });
+
+    const unplannedWork = getFieldValue('unplannedWork');
+    if (unplannedWork) {
+      const concern = unplannedWork === 'Often' || unplannedWork === 'Almost always';
+      signals.push({
+        title: 'Suggested metric — unplanned work rate',
+        tier: unplannedWork,
+        weak: concern,
+        body: concern ? "Frequent priority disruption points to time fragmentation and requirements instability. Track the unplanned work rate and review why work is being interrupted." : "Unplanned work is not a priority right now based on this response.",
+        source: SPACE_SOURCE + "; Wagner & Ruhe productivity factors",
+        raw: unplannedWork
+      });
+    }
 
     return signals;
   }
@@ -925,77 +933,6 @@
     setTimeout(() => { els.copyMsg.textContent = ''; }, 2500);
   });
 
-  function setStatus(text, isError) {
-    els.status.textContent = text || '';
-    els.status.classList.toggle('is-error', !!isError);
-  }
-
-  let sampleFn = null;
-  (async () => {
-    try {
-      sampleFn = await claude.use('sample');
-      if (!sampleFn) {
-        setStatus('Drafting isn\u2019t available in this view \u2014 fill in the case file by hand below.');
-      }
-    } catch (e) {
-      sampleFn = null;
-      setStatus('Drafting isn\u2019t available in this view \u2014 fill in the case file by hand below.');
-    }
-  })();
-
-  els.draftBtn.addEventListener('click', async () => {
-    const company = els.companyName.value.trim();
-    if (!company) {
-      setStatus('Enter a company name first.', true);
-      return;
-    }
-    if (!sampleFn) {
-      setStatus('Drafting isn\u2019t available in this view \u2014 fill in the case file by hand.', true);
-      return;
-    }
-    els.draftBtn.disabled = true;
-    setStatus('Drafting from general knowledge\u2026');
-
-    const prompt = `You are helping prepare a business worksheet about the company "${company}" for a colleague to review before sending it out.
-
-From your general knowledge of this company (you have no live web access here), provide your best-effort draft for each of these:
-- mission: the company's stated mission or purpose, 1-2 sentences
-- top_metric: a short guess at the single thing that matters most to this company's success, phrased as a plain statement (not a question)
-- strategy: a brief guess at the company's core business strategy, 2-3 sentences
-- revenue_model: a brief guess at how the company makes money, 2-3 sentences
-- focus: exactly one of these three strings, whichever best fits: "Customer loyalty / retention", "New customer acquisition", "Both equally"
-- kpis: 3 to 5 suggested KPIs for tracking this company's success, as one comma-separated string
-
-If you don't have reliable knowledge of this company, write "Not enough reliable information \u2014 please fill in manually." in the relevant text fields instead of guessing, and still pick a reasonable default for focus.
-
-Respond with ONLY a JSON object with exactly these keys: mission, top_metric, strategy, revenue_model, focus, kpis. No markdown formatting, no commentary, no code fences.`;
-
-    try {
-      const result = await sampleFn.json(prompt, { modelTier: 'default' });
-      const data = (result && result.mission !== undefined) ? result : (result && result.json) || result;
-      els.mission.value = data.mission || '';
-      els.topMetric.value = data.top_metric || '';
-      els.strategy.value = data.strategy || '';
-      els.revenueModel.value = data.revenue_model || '';
-      if (data.focus && ['Customer loyalty / retention','New customer acquisition','Both equally'].includes(data.focus)) {
-        els.focus.value = data.focus;
-      }
-      els.kpis.value = data.kpis || '';
-      refreshAll();
-      setStatus('Drafted \u2014 review and edit before sending.');
-    } catch (err) {
-      const code = err && err.code;
-      if (code === 'not_granted') {
-        setStatus('Drafting access wasn\u2019t granted \u2014 fill in the case file by hand.', true);
-      } else if (code === 'rate_limited') {
-        setStatus('Rate limited \u2014 wait a moment and try again.', true);
-      } else {
-        setStatus('Couldn\u2019t draft that \u2014 fill in the case file by hand.', true);
-      }
-    } finally {
-      els.draftBtn.disabled = false;
-    }
-  });
 })();
 </script>
 </body>
