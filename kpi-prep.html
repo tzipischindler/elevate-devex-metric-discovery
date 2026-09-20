@@ -886,12 +886,18 @@
       if (!val) return;
       const tier = tierFromExact(val, check.tiers);
       const weak = isRetentionWeightedWeak(tier, goal, check.key);
+      const isRetentionPriority = goal === 'Customer loyalty / retention' &&
+        (check.key === 'leadTime' || check.key === 'deployFreq');
       const weightedWeak = isReliabilityStrategy && (check.key === 'changeFailureRate' || check.key === 'mttr')
         ? weak || ['High', 'Medium', 'Low'].includes(tier)
         : weak;
       const body = weightedWeak
         ? isReliabilityStrategy && (check.key === 'changeFailureRate' || check.key === 'mttr')
           ? "This is especially important for a reliability-led strategy. Customers notice faults and recovery speed directly, so these are high-priority operational signals to address first."
+          : isRetentionPriority
+            ? check.key === 'leadTime'
+              ? "Customer loyalty and retention are the priority, so reducing lead time helps customers receive valuable fixes and improvements sooner. Treat this as a priority even when the DORA tier is still High."
+              : "Customer loyalty and retention are the priority, so increasing deployment frequency helps the team deliver fixes and improvements sooner. Treat this as a priority even when the DORA tier is still High."
           : check.advice
         : "This is tracking at a strong DORA tier — keep an eye on it, but it's not a priority right now.";
       signals.push({
