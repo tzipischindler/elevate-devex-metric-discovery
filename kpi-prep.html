@@ -638,7 +638,7 @@
     <div class="panel">
       <div class="panel-head"><h2>About our business</h2></div>
       <div class="row question">
-        <label for="focus">Which customer goal does your company prioritize most?</label>
+        <label for="focus">Which customer goal does your company prioritize most, customer acquisition/retention, or both?</label>
         <div>
           <select id="focus">
             <option value="Customer loyalty / retention">Customer loyalty / retention</option>
@@ -770,6 +770,14 @@
 
   const DORA_WEAK_TIERS = { 'Medium': true, 'Low': true, 'Unclear': false };
 
+  function isRetentionWeightedWeak(tier, goal, key) {
+    if (goal !== 'Customer loyalty / retention') return DORA_WEAK_TIERS[tier] === true || tier === 'Unclear';
+    if (key === 'leadTime' || key === 'deployFreq') {
+      return ['High', 'Medium', 'Low'].includes(tier) || tier === 'Unclear';
+    }
+    return DORA_WEAK_TIERS[tier] === true || tier === 'Unclear';
+  }
+
   // Most Likert items: low score = concern. commEase is reversed on this form
   // (1 = reach agreement / good, 5 = stuck in disagreement / bad).
   function likertConcern(valueStr, max, reversed) {
@@ -795,11 +803,13 @@
         advice: "Slow restores usually point to observability or on-call/escalation gaps rather than engineer skill. Wagner & Ruhe's 'Telecommunication Facilities' and 'Manager Capability' factors are worth checking." }
     ];
 
+    const goal = getFieldValue('focus');
+
     doraChecks.forEach(check => {
       const val = getFieldValue(check.key);
       if (!val) return;
       const tier = tierFromExact(val, check.tiers);
-      const weak = DORA_WEAK_TIERS[tier] === true || tier === 'Unclear';
+      const weak = isRetentionWeightedWeak(tier, goal, check.key);
       signals.push({
         title: check.label,
         tier: tier === 'Unclear' ? 'Tier unclear' : tier + ' tier',
