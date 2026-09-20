@@ -949,15 +949,30 @@
     const techDebt = getFieldValue('techDebt');
     if (techDebt) {
       const grade = TECH_DEBT_TIERS[techDebt] || 'Unclear';
-      const isLowestCostStrategy = getFieldValue('strategy') === 'Lowest cost SaaS provider of a product of our kind';
+      const strategy = getFieldValue('strategy');
+      const isLowestCostStrategy = strategy === 'Lowest cost SaaS provider of a product of our kind';
+      const isPlatformStrategy = strategy === 'Platform Ecosystem/App Marketplace';
+      const isAcquireMergeGrowStrategy = strategy === 'Acquire, Merge, Grow';
       const weak = TECH_DEBT_WEAK_GRADES[grade] === true || grade === 'Unclear';
-      const weightedWeak = isLowestCostStrategy ? weak || ['C', 'D', 'E'].includes(grade) || grade === 'B' : weak;
+      const weightedWeak = isLowestCostStrategy
+        ? weak || ['C', 'D', 'E'].includes(grade) || grade === 'B'
+        : isPlatformStrategy
+          ? weak || ['B', 'C', 'D', 'E'].includes(grade)
+          : isAcquireMergeGrowStrategy
+            ? weak || ['B', 'C', 'D', 'E'].includes(grade)
+            : weak;
       signals.push({
         title: 'Tech Debt Ratio (% time lost)',
         tier: grade === 'Unclear' ? 'Grade unclear' : 'SQALE grade ' + grade,
         weak: weightedWeak,
         body: weightedWeak
-          ? "This self-reported share of time lost to debt lands in SQALE's C-E range (11%+) — the point where remediation cost is a material fraction of what the team spends building new things. In a lowest-cost strategy, this becomes especially important because debt compounds your cost-to-serve and slows your ability to keep prices competitive. Wagner & Ruhe's 'Legacy code friction' and 'architectural communication gaps' are the usual underlying causes; this is also the direct input to your Total Cost of Build estimate."
+          ? isAcquireMergeGrowStrategy
+            ? "This self-reported share of time lost to debt is especially important in an acquisition-and-growth model because every merge, migration, and integration creates extra complexity. Technical debt can quietly compound in a portfolio of products and slow the pace of integration, standardization, and value capture."
+            : isPlatformStrategy
+              ? "This self-reported share of time lost to debt is especially important in a platform or marketplace model because every unit of engineering effort spent on maintenance is time not spent on ecosystem quality, partner enablement, or feature velocity. In a platform business, debt also slows onboarding, extension quality, and partner trust."
+              : isLowestCostStrategy
+                ? "This self-reported share of time lost to debt lands in SQALE's C-E range (11%+) — the point where remediation cost is a material fraction of what the team spends building new things. In a lowest-cost strategy, this becomes especially important because debt compounds your cost-to-serve and slows your ability to keep prices competitive. Wagner & Ruhe's 'Legacy code friction' and 'architectural communication gaps' are the usual underlying causes; this is also the direct input to your Total Cost of Build estimate."
+                : "This self-reported share of time lost to debt lands in SQALE's C-E range (11%+) — the point where remediation cost is a material fraction of what the team spends building new things. Wagner & Ruhe's 'Legacy code friction' and 'architectural communication gaps' are the usual underlying causes; this is also the direct input to your Total Cost of Build estimate."
           : "This is tracking at a healthy SQALE grade (A/B, under 10%) — keep monitoring, but it's not a priority right now.",
         source: SQALE_SOURCE + "; " + WR_SOURCE,
         raw: techDebt
