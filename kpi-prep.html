@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>KPI Discovery — Field Prep</title>
+<title>DevEx KPI Discovery</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -634,6 +634,33 @@
           </div>
         </div>
       </div>
+      <div class="row question">
+        <label for="techDebt">Think of the past month — roughly what share of your time went to dealing with technical debt (fixing fragile code, workarounds, or maintenance) instead of new work?</label>
+      </div>
+      <div class="row radio-options">
+        <div class="radio-group" id="techDebt">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="techDebt" id="techDebt1" value="0-5% — Rarely comes up">
+            <label class="form-check-label" for="techDebt1">0-5% — Rarely comes up</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="techDebt" id="techDebt2" value="6-10% — A normal part of the work">
+            <label class="form-check-label" for="techDebt2">6-10% — A normal part of the work</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="techDebt" id="techDebt3" value="11-20% — A frequent drag">
+            <label class="form-check-label" for="techDebt3">11-20% — A frequent drag</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="techDebt" id="techDebt4" value="21-50% — A major share of my time">
+            <label class="form-check-label" for="techDebt4">21-50% — A major share of my time</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="techDebt" id="techDebt5" value="More than 50% — It's most of what I do">
+            <label class="form-check-label" for="techDebt5">More than 50% — It's most of what I do</label>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="panel">
@@ -642,8 +669,8 @@
         <label>What describes best your company's strategy</label>
         <div class="radio-group" id="strategy">
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="strategy" id="strategy1" value="Lowest SaaS provider of a product of our kind">
-            <label class="form-check-label" for="strategy1">Lowest SaaS provider of a product of our kind</label>
+            <input class="form-check-input" type="radio" name="strategy" id="strategy1" value="Low cost SaaS provider of a product of our kind">
+            <label class="form-check-label" for="strategy1">Low cost SaaS provider of a product of our kind</label>
           </div>
           <div class="form-check">
             <input class="form-check-input" type="radio" name="strategy" id="strategy2" value="Differentiation by higher quality UX/UI">
@@ -694,10 +721,10 @@
     <p class="section-label">LINK</p>
     <div class="panel">
       <div class="link-panel">
-        <label for="linkOut">Pre-filled form link</label>
+        <label for="linkOut">Create your own form</label>
         <div class="link-row">
           <input type="text" id="linkOut" readonly>
-          <button class="btn-secondary" id="copyBtn" type="button">Copy</button>
+          <button class="btn-secondary" id="copyBtn" type="button">Copy form</button>
         </div>
         <div class="link-actions">
           <a id="openLink" href="#" target="_blank" rel="noopener">
@@ -706,7 +733,6 @@
           <span class="copy-msg" id="copyMsg"></span>
         </div>
       </div>
-      <div class="note">Nothing here submits the form — it only builds a link with these answers pre-loaded. Review every field before sending it to a respondent.</div>
     </div>
   </div>
 
@@ -714,7 +740,7 @@
 
 <script>
 (function () {
-  const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfo4a8Pu6MueTZPZMuBPnC1mI3Tj48QXzfmrFUKGFQJudruNA/viewform";
+  const FORM_BASE = "https://docs.google.com/forms/u/1/d/1bFVYAl0kgmMXrmC0J8JWilHphWq_ooEWhCD3MJpVMyE/copy";
   const ENTRY = {
     strategy: "entry.121749003",
     focus: "entry.1319920343",
@@ -726,11 +752,12 @@
     focusTime: "entry.999476186",
     commEase: "entry.1507529450",
     prTurnaround: "entry.1840675321",
+    techDebt: "entry.309838930",
   };
 
   const ids = ['strategy','focus',
     'deployFreq','leadTime','changeFailureRate','mttr','flowInterrupt','focusTime','commEase','prTurnaround',
-    'goalClarity','unplannedWork'];
+    'goalClarity','unplannedWork','techDebt'];
   const els = {};
   ids.forEach(id => { els[id] = document.getElementById(id); });
   els.linkOut = document.getElementById('linkOut');
@@ -752,12 +779,13 @@
       [ENTRY.flowInterrupt, getFieldValue('flowInterrupt')],
       [ENTRY.focusTime, getFieldValue('focusTime')],
       [ENTRY.commEase, getFieldValue('commEase')],
-      [ENTRY.prTurnaround, getFieldValue('prTurnaround')]
+      [ENTRY.prTurnaround, getFieldValue('prTurnaround')],
+      [ENTRY.techDebt, getFieldValue('techDebt')]
     ];
     fieldMap.forEach(([key, val]) => { if (val) params.set(key, val); });
     const url = FORM_BASE + '?' + params.toString();
-    els.linkOut.value = url;
-    els.openLink.href = url;
+    if (els.linkOut) els.linkOut.value = url;
+    if (els.openLink) els.openLink.href = url;
   }
 
   function getFieldValue(id) {
@@ -777,6 +805,16 @@
   const DORA_SOURCE = "DORA / Accelerate State of DevOps research (Forsgren et al.)";
   const SPACE_SOURCE = "SPACE framework (Forsgren, Storey, Maddila, Zimmermann, Houck, Butler)";
   const WR_SOURCE = "Wagner & Ruhe, productivity factors review (arXiv:1801.06475)";
+  const SQALE_SOURCE = "SQALE method (Letouzey, 2009) — the technical-debt-ratio model behind SonarQube's maintainability rating";
+
+  const TECH_DEBT_TIERS = {
+    "0-5% — Rarely comes up": "A",
+    "6-10% — A normal part of the work": "B",
+    "11-20% — A frequent drag": "C",
+    "21-50% — A major share of my time": "D",
+    "More than 50% — It's most of what I do": "E"
+  };
+  const TECH_DEBT_WEAK_GRADES = { 'C': true, 'D': true, 'E': true };
 
   const DEPLOY_TIERS = {
     "On-demand / multiple times per day": "Elite",
@@ -898,6 +936,22 @@
       });
     }
 
+    const techDebt = getFieldValue('techDebt');
+    if (techDebt) {
+      const grade = TECH_DEBT_TIERS[techDebt] || 'Unclear';
+      const weak = TECH_DEBT_WEAK_GRADES[grade] === true || grade === 'Unclear';
+      signals.push({
+        title: 'Tech Debt Ratio (% time lost)',
+        tier: grade === 'Unclear' ? 'Grade unclear' : 'SQALE grade ' + grade,
+        weak: weak,
+        body: weak
+          ? "This self-reported share of time lost to debt lands in SQALE's C-E range (11%+) — the point where remediation cost is a material fraction of what the team spends building new things. Wagner & Ruhe's 'Legacy code friction' and 'architectural communication gaps' are the usual underlying causes; this is also the direct input to your Total Cost of Build estimate."
+          : "This is tracking at a healthy SQALE grade (A/B, under 10%) — keep monitoring, but it's not a priority right now.",
+        source: SQALE_SOURCE + "; " + WR_SOURCE,
+        raw: techDebt
+      });
+    }
+
     return signals;
   }
 
@@ -941,16 +995,20 @@
   });
   refreshAll();
 
-  els.copyBtn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(els.linkOut.value);
-      els.copyMsg.textContent = 'Copied.';
-    } catch (e) {
-      els.linkOut.select();
-      els.copyMsg.textContent = 'Select the text and copy manually.';
-    }
-    setTimeout(() => { els.copyMsg.textContent = ''; }, 2500);
-  });
+  if (els.copyBtn) {
+    els.copyBtn.addEventListener('click', async () => {
+      try {
+        if (els.linkOut) await navigator.clipboard.writeText(els.linkOut.value);
+        if (els.copyMsg) els.copyMsg.textContent = 'Copied.';
+      } catch (e) {
+        if (els.linkOut) els.linkOut.select();
+        if (els.copyMsg) els.copyMsg.textContent = 'Select the text and copy manually.';
+      }
+      if (els.copyMsg) {
+        setTimeout(() => { els.copyMsg.textContent = ''; }, 2500);
+      }
+    });
+  }
 
 })();
 </script>
