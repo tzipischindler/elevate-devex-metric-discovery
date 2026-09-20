@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <style>
   :root {
     --bg: #F3F6F3;
@@ -730,6 +731,7 @@
           <a id="openLink" href="#" target="_blank" rel="noopener">
             <button class="btn-secondary" type="button">Open form</button>
           </a>
+          <button class="btn-primary" id="exportPptx" type="button">Export PowerPoint</button>
           <span class="copy-msg" id="copyMsg"></span>
         </div>
       </div>
@@ -740,7 +742,7 @@
 
 <script>
 (function () {
-  const FORM_BASE = "https://docs.google.com/forms/u/1/d/1bFVYAl0kgmMXrmC0J8JWilHphWq_ooEWhCD3MJpVMyE/copy";
+  const FORM_BASE = "https://docs.google.com/forms/d/1bFVYAl0kgmMXrmC0J8JWilHphWq_ooEWhCD3MJpVMyE/copy";
   const ENTRY = {
     strategy: "entry.121749003",
     focus: "entry.1319920343",
@@ -764,6 +766,7 @@
   els.copyBtn = document.getElementById('copyBtn');
   els.copyMsg = document.getElementById('copyMsg');
   els.openLink = document.getElementById('openLink');
+  els.exportPptx = document.getElementById('exportPptx');
   els.signalsBody = document.getElementById('signalsBody');
 
   function buildLink() {
@@ -1017,6 +1020,87 @@
     return d.innerHTML;
   }
 
+  function addSlideTitle(slide, title, subtitle) {
+    slide.background = { color: 'F3F6F3' };
+    slide.addText(title, {
+      x: 0.7, y: 0.65, w: 8.6, h: 0.5,
+      fontFace: 'Aptos Display', fontSize: 25, bold: true,
+      color: '17241C', margin: 0
+    });
+    if (subtitle) {
+      slide.addText(subtitle, {
+        x: 0.7, y: 1.25, w: 8.6, h: 0.35,
+        fontFace: 'Aptos', fontSize: 12, color: '56685D', margin: 0
+      });
+    }
+  }
+
+  function exportPowerPoint() {
+    const PptxGenJS = window.pptxgen || window.PptxGenJS;
+    if (!PptxGenJS) {
+      els.copyMsg.textContent = 'PowerPoint export is unavailable.';
+      return;
+    }
+
+    const signals = buildSignals();
+    const priorities = signals.filter(signal => signal.weak);
+    const pptx = new PptxGenJS();
+    pptx.layout = 'LAYOUT_WIDE';
+    pptx.author = 'DevEx KPI Discovery';
+    pptx.subject = 'Suggested engineering metrics';
+    pptx.title = 'DevEx KPI Discovery';
+    pptx.company = 'DevEx KPI Discovery';
+
+    const titleSlide = pptx.addSlide();
+    addSlideTitle(titleSlide, 'DevEx KPI Discovery', 'Suggested metrics for a team conversation');
+    titleSlide.addText('A practical starting point for discussing delivery health, developer experience, and technical debt.', {
+      x: 0.7, y: 2.1, w: 8.4, h: 0.7,
+      fontFace: 'Aptos', fontSize: 20, color: '3C6A57', margin: 0,
+      breakLine: false, fit: 'shrink'
+    });
+
+    const summarySlide = pptx.addSlide();
+    addSlideTitle(summarySlide, 'Priority metrics', priorities.length
+      ? 'These areas surfaced as the strongest candidates for discussion.'
+      : 'No priority areas have been identified yet.');
+    if (priorities.length) {
+      priorities.forEach((signal, index) => {
+        const y = 1.9 + index * 0.6;
+        summarySlide.addText(signal.title, {
+          x: 0.9, y, w: 5.8, h: 0.25,
+          fontFace: 'Aptos', fontSize: 15, bold: true, color: '17241C', margin: 0
+        });
+        summarySlide.addText(signal.tier, {
+          x: 7.1, y, w: 2, h: 0.25,
+          fontFace: 'Aptos', fontSize: 13, color: 'A9812F', align: 'right', margin: 0
+        });
+      });
+    } else {
+      summarySlide.addText('Complete the survey to generate metric recommendations.', {
+        x: 0.9, y: 2, w: 8, h: 0.35,
+        fontFace: 'Aptos', fontSize: 16, color: '56685D', margin: 0
+      });
+    }
+
+    signals.forEach(signal => {
+      const slide = pptx.addSlide();
+      addSlideTitle(slide, signal.title, signal.tier);
+      slide.addText(signal.body, {
+        x: 0.9, y: 1.9, w: 8.2, h: 1.2,
+        fontFace: 'Aptos', fontSize: 18, color: '17241C',
+        breakLine: false, fit: 'shrink', margin: 0.04,
+        valign: 'mid'
+      });
+      slide.addText('Source: ' + signal.source, {
+        x: 0.9, y: 4.9, w: 8.2, h: 0.5,
+        fontFace: 'Aptos', fontSize: 11, italic: true,
+        color: '56685D', fit: 'shrink', margin: 0
+      });
+    });
+
+    pptx.writeFile({ fileName: 'devex-kpi-discovery.pptx' });
+  }
+
   function refreshAll() {
     buildLink();
     renderSignals();
@@ -1042,6 +1126,8 @@
       }
     });
   }
+
+  if (els.exportPptx) els.exportPptx.addEventListener('click', exportPowerPoint);
 
 })();
 </script>
