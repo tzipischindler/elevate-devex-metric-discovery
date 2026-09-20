@@ -263,6 +263,7 @@
   .form-check { display: flex; align-items: flex-start; gap: 8px; }
   .form-check-input { margin: 3px 0 0; accent-color: var(--accent); }
   .form-check-label { font-size: 14px; line-height: 1.4; grid-template-columns: 1fr; }
+  .row .form-check-label { color: var(--ink-soft); }
   .rating-scale {
     display: grid;
     grid-template-columns: minmax(90px, 1fr) minmax(0, 3fr) minmax(90px, 1fr);
@@ -638,12 +639,45 @@
     <div class="panel">
       <div class="panel-head"><h2>About our business</h2></div>
       <div class="row question">
-        <label for="focus">Which customer goal does your company prioritize most, customer acquisition/retention, or both?</label>
+        <label>What describes best your company's strategy</label>
+        <div class="radio-group" id="strategy">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="strategy" id="strategy1" value="Lowest SaaS provider of a product of our kind">
+            <label class="form-check-label" for="strategy1">Lowest SaaS provider of a product of our kind</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="strategy" id="strategy2" value="Differentiation by higher quality UX/UI">
+            <label class="form-check-label" for="strategy2">Differentiation by higher quality UX/UI</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="strategy" id="strategy3" value="Differentiation by reliability/uptime">
+            <label class="form-check-label" for="strategy3">Differentiation by reliability/uptime</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="strategy" id="strategy4" value="Platform Ecosystem/App Marketplace">
+            <label class="form-check-label" for="strategy4">Platform Ecosystem/App Marketplace</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="strategy" id="strategy5" value="Free Entry, Pay Per Use">
+            <label class="form-check-label" for="strategy5">Free Entry, Pay Per Use</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="strategy" id="strategy6" value="Acquire, Merge, Grow">
+            <label class="form-check-label" for="strategy6">Acquire, Merge, Grow</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="strategy" id="strategy7" value="N/A" checked>
+            <label class="form-check-label" for="strategy7">N/A</label>
+          </div>
+        </div>
+      </div>
+      <div class="row question">
+        <label class="form-check-label" for="focus">Which customer goal does your company prioritize most, customer acquisition/retention, or both?</label>
         <div>
-          <select id="focus">
-            <option value="Customer loyalty / retention">Customer loyalty / retention</option>
-            <option value="New customer acquisition">New customer acquisition</option>
-            <option value="Both equally" selected>Both equally</option>
+          <select id="focus" class="form-check-label">
+            <option class="form-check-label" value="Customer loyalty / retention">Customer loyalty / retention</option>
+            <option class="form-check-label" value="New customer acquisition">New customer acquisition</option>
+            <option class="form-check-label" value="Both equally" selected>Both equally</option>
           </select>
         </div>
       </div>
@@ -682,6 +716,7 @@
 (function () {
   const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfo4a8Pu6MueTZPZMuBPnC1mI3Tj48QXzfmrFUKGFQJudruNA/viewform";
   const ENTRY = {
+    strategy: "entry.121749003",
     focus: "entry.1319920343",
     deployFreq: "entry.698040889",
     leadTime: "entry.356411419",
@@ -693,7 +728,7 @@
     prTurnaround: "entry.1840675321",
   };
 
-  const ids = ['focus',
+  const ids = ['strategy','focus',
     'deployFreq','leadTime','changeFailureRate','mttr','flowInterrupt','focusTime','commEase','prTurnaround',
     'goalClarity','unplannedWork'];
   const els = {};
@@ -708,6 +743,7 @@
     const params = new URLSearchParams();
     params.set('usp', 'pp_url');
     const fieldMap = [
+      [ENTRY.strategy, getFieldValue('strategy')],
       [ENTRY.focus, els.focus.value],
       [ENTRY.deployFreq, getFieldValue('deployFreq')],
       [ENTRY.leadTime, getFieldValue('leadTime')],
