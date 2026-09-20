@@ -189,20 +189,6 @@
     padding-right: 28px;
   }
 
-  .company-row {
-    padding: 20px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-  }
-  .company-row .field { flex: 1; }
-  .company-row label {
-    display: block;
-    font-size: 13px;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-  }
-
   button {
     font-family: 'IBM Plex Sans', sans-serif;
     font-weight: 500;
@@ -358,7 +344,6 @@
   @media (max-width: 560px) {
     .row { grid-template-columns: 1fr; gap: 6px; }
     .row label { padding-top: 0; }
-    .company-row { flex-direction: column; align-items: stretch; }
     .link-row { flex-direction: column; }
     .masthead h1 { font-size: 25px; }
   }
@@ -370,30 +355,6 @@
       <p class="kicker">DevEx KPI Discovery</p>
       <h1>Let's start talking!</h1>
           <p>Answer a few structured questions about your team and get a short list of health metrics worth discussing together.</p>
-    </div>
-
-    <p class="section-label">COMPANY</p>
-    <div class="panel">
-      <div class="company-row">
-        <div class="field">
-          <label for="companyName">Company name</label>
-          <input type="text" id="companyName" placeholder="e.g. HelloFresh" autocomplete="off">
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-head"><h2>About our business</h2></div>
-      <div class="row">
-        <label for="focus">Focus</label>
-        <div>
-          <select id="focus">
-            <option value="Customer loyalty / retention">Customer loyalty / retention</option>
-            <option value="New customer acquisition">New customer acquisition</option>
-            <option value="Both equally" selected>Both equally</option>
-          </select>
-        </div>
-      </div>
     </div>
 
     <p class="section-label">DevEx survey</p>
@@ -674,6 +635,20 @@
       </div>
     </div>
 
+    <div class="panel">
+      <div class="panel-head"><h2>About our business</h2></div>
+      <div class="row question">
+        <label for="focus">Which customer goal does your company prioritize most?</label>
+        <div>
+          <select id="focus">
+            <option value="Customer loyalty / retention">Customer loyalty / retention</option>
+            <option value="New customer acquisition">New customer acquisition</option>
+            <option value="Both equally" selected>Both equally</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
     <p class="section-label">DEVX SIGNALS</p>
     <div class="panel">
       <div class="panel-head"><h2>WEAKEST AREAS FIRST, GROUNDED IN YOUR DATASET</h2></div>
@@ -707,7 +682,6 @@
 (function () {
   const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLSfo4a8Pu6MueTZPZMuBPnC1mI3Tj48QXzfmrFUKGFQJudruNA/viewform";
   const ENTRY = {
-    company: "entry.61919964",
     focus: "entry.1319920343",
     deployFreq: "entry.698040889",
     leadTime: "entry.356411419",
@@ -719,7 +693,7 @@
     prTurnaround: "entry.1840675321",
   };
 
-  const ids = ['companyName','focus',
+  const ids = ['focus',
     'deployFreq','leadTime','changeFailureRate','mttr','flowInterrupt','focusTime','commEase','prTurnaround',
     'goalClarity','unplannedWork'];
   const els = {};
@@ -734,7 +708,6 @@
     const params = new URLSearchParams();
     params.set('usp', 'pp_url');
     const fieldMap = [
-      [ENTRY.company, els.companyName.value],
       [ENTRY.focus, els.focus.value],
       [ENTRY.deployFreq, getFieldValue('deployFreq')],
       [ENTRY.leadTime, getFieldValue('leadTime')],
