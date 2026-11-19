@@ -83,8 +83,15 @@
     :root:not([data-theme="light"]) .masthead .kicker {
       color: #D3AE55;
     }
+    :root:not([data-theme="light"]) .signal-card,
+    :root:not([data-theme="light"]) .signal-card.ok {
+      background: #29252d;
+    }
     :root:not([data-theme="light"]) .signal-card .signal-title {
       color: #E8EEE9;
+    }
+    :root:not([data-theme="light"]) .signal-card p {
+      color: #d2cbd4;
     }
   }
   :root[data-theme="dark"] {
@@ -138,8 +145,15 @@
   :root[data-theme="dark"] .masthead .kicker {
     color: #D3AE55;
   }
+  :root[data-theme="dark"] .signal-card,
+  :root[data-theme="dark"] .signal-card.ok {
+    background: #29252d;
+  }
   :root[data-theme="dark"] .signal-card .signal-title {
     color: #E8EEE9;
+  }
+  :root[data-theme="dark"] .signal-card p {
+    color: #d2cbd4;
   }
 
   * { box-sizing: border-box; }
